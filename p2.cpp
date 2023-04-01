@@ -53,7 +53,9 @@ public:
             while (!infile.eof()) {
                 Alumno tmp;
                 infile >> tmp;
-                alumnos.push_back(tmp);
+                if (!infile.eof()) {
+                    alumnos.push_back(tmp);
+                }
             }
             infile.close();
         } else {
@@ -88,4 +90,36 @@ public:
 };
 
 int main() {
+    FixedRecord fixedRecord("../datos3.bin");
+    for (int i = 0; i < 1; ++i) {
+        Alumno alumno;
+        cout << "Codigo: ";
+        readFromConsole(alumno.codigo, 5);
+        cout << "Nombre: ";
+        readFromConsole(alumno.nombre, 11);
+        cout << "Apellidos: ";
+        readFromConsole(alumno.apellidos, 20);
+        cout << "Carrera: ";
+        readFromConsole(alumno.carrera, 15);
+        cout << "Ciclo: ";
+        cin >> alumno.ciclo;
+        cout << "Mensualidad: ";
+        cin >> alumno.mensualidad;
+        fixedRecord.add(alumno);
+    }
+    vector<Alumno> alumnos = fixedRecord.load();
+    for (auto &tmp: alumnos) {
+        cout << "Codigo:" << tmp.codigo << endl;
+        cout << "Nombre:" << tmp.nombre << endl;
+        cout << "Apellidos:" << tmp.apellidos << endl;
+        cout << "Carrera:" << tmp.carrera << endl;
+        cout << "Ciclo:" << tmp.ciclo << endl;
+        cout << "Mensualidad:" << tmp.mensualidad << endl;
+    }
+//    Alumno segundo = fixedRecord.readRecord(1);
+//    cout << "Codigo:" << segundo.codigo << endl;
+//    cout << "Nombre:" << segundo.nombre << endl;
+//    cout << "Apellidos:" << segundo.apellidos << endl;
+//    cout << "Carrera:" << segundo.carrera << endl;
+    return 0;
 }
