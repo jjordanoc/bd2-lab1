@@ -40,16 +40,16 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "lab1::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-lab1-Debug-0121bb10f22e80dab72d.json",
-					"name" : "lab1",
+					"id" : "p1::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-p1-Debug-384bf84b3da442f6c641.json",
+					"name" : "p1",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
-					"id" : "p1::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-p1-Debug-2353e3b8ec5d2cbf4890.json",
-					"name" : "p1",
+					"id" : "p2::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-p2-Debug-d0e3c98ed087e7af25a2.json",
+					"name" : "p2",
 					"projectIndex" : 0
 				}
 			]
