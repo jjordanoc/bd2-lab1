@@ -85,8 +85,9 @@ public:
     Alumno readRecord(int pos) {
         ifstream infile(filename);
         Alumno tmp;
+        int salto = 2;
         if (infile.is_open()) {
-            infile.seekg(pos * sizeof(tmp));
+            infile.seekg(pos * sizeof(tmp) + pos * salto);
             infile >> tmp;
         } else {
             cerr << "No se pudo abrir el archivo\n";
@@ -115,7 +116,7 @@ int main() {
     cout << "Carrera: ";
     readFromConsole(alumno.carrera, 15);
     fixedRecord.add(alumno);
-    Alumno segundo = fixedRecord.readRecord(1);
+    Alumno segundo = fixedRecord.readRecord(4);
     cout << "Codigo:" << segundo.codigo << endl;
     cout << "Nombre:" << segundo.nombre << endl;
     cout << "Apellidos:" << segundo.apellidos << endl;
