@@ -116,10 +116,10 @@ int main() {
         cout << "Ciclo:" << tmp.ciclo << endl;
         cout << "Mensualidad:" << tmp.mensualidad << endl;
     }
-//    Alumno segundo = fixedRecord.readRecord(1);
-//    cout << "Codigo:" << segundo.codigo << endl;
-//    cout << "Nombre:" << segundo.nombre << endl;
-//    cout << "Apellidos:" << segundo.apellidos << endl;
-//    cout << "Carrera:" << segundo.carrera << endl;
+    //    Alumno segundo = fixedRecord.readRecord(1);
+    //    cout << "Codigo:" << segundo.codigo << endl;
+    //    cout << "Nombre:" << segundo.nombre << endl;
+    //    cout << "Apellidos:" << segundo.apellidos << endl;
+    //    cout << "Carrera:" << segundo.carrera << endl;
     return 0;
 }

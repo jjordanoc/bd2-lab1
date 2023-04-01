@@ -59,7 +59,9 @@ public:
             while (!infile.eof()) {
                 Alumno tmp;
                 infile >> tmp;
-                alumnos.push_back(tmp);
+                if (!infile.eof()) {
+                    alumnos.push_back(tmp);
+                }
             }
             infile.close();
         } else {
@@ -103,20 +105,20 @@ int main() {
         cout << "Apellidos:" << tmp.apellidos << endl;
         cout << "Carrera:" << tmp.carrera << endl;
     }
-        Alumno alumno;
-        cout << "Codigo: ";
-        readFromConsole(alumno.codigo, 5);
-        cout << "Nombre: ";
-        readFromConsole(alumno.nombre, 11);
-        cout << "Apellidos: ";
-        readFromConsole(alumno.apellidos, 20);
-        cout << "Carrera: ";
-        readFromConsole(alumno.carrera, 15);
-        fixedRecord.add(alumno);
-        Alumno segundo = fixedRecord.readRecord(1);
-        cout << "Codigo:" << segundo.codigo << endl;
-        cout << "Nombre:" << segundo.nombre << endl;
-        cout << "Apellidos:" << segundo.apellidos << endl;
-        cout << "Carrera:" << segundo.carrera << endl;
+    Alumno alumno;
+    cout << "Codigo: ";
+    readFromConsole(alumno.codigo, 5);
+    cout << "Nombre: ";
+    readFromConsole(alumno.nombre, 11);
+    cout << "Apellidos: ";
+    readFromConsole(alumno.apellidos, 20);
+    cout << "Carrera: ";
+    readFromConsole(alumno.carrera, 15);
+    fixedRecord.add(alumno);
+    Alumno segundo = fixedRecord.readRecord(1);
+    cout << "Codigo:" << segundo.codigo << endl;
+    cout << "Nombre:" << segundo.nombre << endl;
+    cout << "Apellidos:" << segundo.apellidos << endl;
+    cout << "Carrera:" << segundo.carrera << endl;
     return 0;
 }
