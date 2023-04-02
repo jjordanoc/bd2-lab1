@@ -13,6 +13,7 @@ struct Alumno {
 
     int ciclo;
     float mensualidad;
+    int del;
 };
 
 void readFromConsole(char buffer[], int size) {
@@ -65,11 +66,13 @@ public:
     }
 
     void add(Alumno record) {
-        ofstream outFile;
-        outFile.open(filename, ios::app | ios::binary);
-        if (outFile.is_open()) {
-            outFile << record;
-            outFile.close();
+        fstream file;
+        file.open(filename, ios::app | ios::binary);
+        Alumno header;
+
+        if (file.is_open()) {
+            file << record;
+            file.close();
 
         } else {
             cerr << "No se pudo abrir el archivo\n";
@@ -82,15 +85,38 @@ public:
         if (infile.is_open()) {
             infile.seekg(pos * sizeof(tmp));
             infile >> tmp;
+            infile.close();
         } else {
             cerr << "No se pudo abrir el archivo\n";
         }
         return tmp;
     }
+
+    bool deleteRecord(int pos) {
+        if (pos <= 0) return false;
+        fstream file(filename);
+        if (file.is_open()) {
+            Alumno header;
+            file >> header;
+            file.seekg(pos * sizeof(Alumno));
+            file << header;
+            file.seekg(0);
+            Alumno newHeader;
+            newHeader.del = pos;
+            file << newHeader;
+            file.close();
+        } else {
+            cerr << "No se pudo abrir el archivo\n";
+        }
+        return true;
+    }
 };
 
 int main() {
-    FixedRecord fixedRecord("../datos3.bin");
+    FixedRecord fixedRecord("../datos4.bin");
+    Alumno header;
+    header.del = -1;
+    fixedRecord.add(header);
     for (int i = 0; i < 1; ++i) {
         Alumno alumno;
         cout << "Codigo: ";
