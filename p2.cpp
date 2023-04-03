@@ -145,6 +145,10 @@ public:
             file << header;
             file.seekp(0);
             Alumno newHeader;
+            for (int i = 0; i < 4; ++i) {
+                newHeader.codigo[i] = 'x';
+            }
+            newHeader.codigo[4] = '\0';
             newHeader.del = pos;
             file << newHeader;
             file.close();
@@ -157,22 +161,23 @@ public:
 
 int main() {
     FixedRecord fixedRecord("../datos5.bin");
-//    for (int i = 0; i < 2; ++i) {
-//        Alumno alumno;
-//        cout << "Codigo: ";
-//        readFromConsole(alumno.codigo, 5);
-//        cout << "Nombre: ";
-//        readFromConsole(alumno.nombre, 11);
-//        cout << "Apellidos: ";
-//        readFromConsole(alumno.apellidos, 20);
-//        cout << "Carrera: ";
-//        readFromConsole(alumno.carrera, 15);
-//        cout << "Ciclo: ";
-//        cin >> alumno.ciclo;
-//        cout << "Mensualidad: ";
-//        cin >> alumno.mensualidad;
-//        fixedRecord.add(alumno);
-//    }
+    for (int i = 0; i < 3; ++i) {
+        Alumno alumno;
+        cout << "Codigo: ";
+        readFromConsole(alumno.codigo, 5);
+        cout << "Nombre: ";
+        readFromConsole(alumno.nombre, 11);
+        cout << "Apellidos: ";
+        readFromConsole(alumno.apellidos, 20);
+        cout << "Carrera: ";
+        readFromConsole(alumno.carrera, 15);
+        cout << "Ciclo: ";
+        cin >> alumno.ciclo;
+        cout << "Mensualidad: ";
+        cin >> alumno.mensualidad;
+        fixedRecord.add(alumno);
+    }
+    cout << "======================================" << endl;
     vector<Alumno> alumnos = fixedRecord.load();
     for (auto &tmp: alumnos) {
         cout << "Codigo:" << tmp.codigo << endl;
@@ -183,13 +188,57 @@ int main() {
         cout << "Mensualidad:" << tmp.mensualidad << endl;
         cout << "Del:" << tmp.del << endl;
     }
-    Alumno primero = fixedRecord.readRecord(1);
-    cout << "Codigo:" << primero.codigo << endl;
-    cout << "Nombre:" << primero.nombre << endl;
-    cout << "Apellidos:" << primero.apellidos << endl;
-    cout << "Carrera:" << primero.carrera << endl;
-    cout << "Ciclo:" << primero.ciclo << endl;
-    cout << "Mensualidad:" << primero.mensualidad << endl;
-    cout << "Del:" << primero.del << endl;
+    cout << "======================================" << endl;
+    cout << "======================================" << endl;
+    Alumno segundo = fixedRecord.readRecord(2);
+    cout << "Codigo:" << segundo.codigo << endl;
+    cout << "Nombre:" << segundo.nombre << endl;
+    cout << "Apellidos:" << segundo.apellidos << endl;
+    cout << "Carrera:" << segundo.carrera << endl;
+    cout << "Ciclo:" << segundo.ciclo << endl;
+    cout << "Mensualidad:" << segundo.mensualidad << endl;
+    cout << "Del:" << segundo.del << endl;
+    cout << "======================================" << endl;
+    fixedRecord.deleteRecord(2);
+    cout << "======================================" << endl;
+    vector<Alumno> nuevosAlumnos = fixedRecord.load();
+    for (auto &tmp: nuevosAlumnos) {
+        cout << "Codigo:" << tmp.codigo << endl;
+        cout << "Nombre:" << tmp.nombre << endl;
+        cout << "Apellidos:" << tmp.apellidos << endl;
+        cout << "Carrera:" << tmp.carrera << endl;
+        cout << "Ciclo:" << tmp.ciclo << endl;
+        cout << "Mensualidad:" << tmp.mensualidad << endl;
+        cout << "Del:" << tmp.del << endl;
+    }
+    cout << "======================================" << endl;
+    cout << "======================================" << endl;
+    Alumno alumno;
+    cout << "Codigo: ";
+    readFromConsole(alumno.codigo, 5);
+    cout << "Nombre: ";
+    readFromConsole(alumno.nombre, 11);
+    cout << "Apellidos: ";
+    readFromConsole(alumno.apellidos, 20);
+    cout << "Carrera: ";
+    readFromConsole(alumno.carrera, 15);
+    cout << "Ciclo: ";
+    cin >> alumno.ciclo;
+    cout << "Mensualidad: ";
+    cin >> alumno.mensualidad;
+    fixedRecord.add(alumno);
+    cout << "======================================" << endl;
+    cout << "======================================" << endl;
+    vector<Alumno> nuevosAlumnos2 = fixedRecord.load();
+    for (auto &tmp: nuevosAlumnos2) {
+        cout << "Codigo:" << tmp.codigo << endl;
+        cout << "Nombre:" << tmp.nombre << endl;
+        cout << "Apellidos:" << tmp.apellidos << endl;
+        cout << "Carrera:" << tmp.carrera << endl;
+        cout << "Ciclo:" << tmp.ciclo << endl;
+        cout << "Mensualidad:" << tmp.mensualidad << endl;
+        cout << "Del:" << tmp.del << endl;
+    }
+    cout << "======================================" << endl;
     return 0;
 }
