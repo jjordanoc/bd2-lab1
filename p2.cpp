@@ -67,10 +67,23 @@ public:
 
     void add(Alumno record) {
         fstream file;
-        file.open(filename, ios::app | ios::binary);
-        Alumno header;
-
+        file.open(filename, ios::ate | ios::binary | ios::in | ios::out);
         if (file.is_open()) {
+            Alumno header;
+            file >> header;
+            if (header.del != -1) {
+                int lastDeletedPos = header.del;
+                file.seekg(lastDeletedPos * sizeof(Alumno));
+                Alumno lastDeletedRegister;
+                file >> lastDeletedRegister;
+                header.del = lastDeletedRegister.del;
+                file.seekg(0);
+                file << header;
+                file.seekg(lastDeletedPos * sizeof(Alumno));
+            }
+            else {
+                file.seekg(ios::end);
+            }
             file << record;
             file.close();
 
@@ -94,8 +107,9 @@ public:
 
     bool deleteRecord(int pos) {
         if (pos <= 0) return false;
-        fstream file(filename);
+        fstream file(filename,ios::in | ios::out | ios::ate);
         if (file.is_open()) {
+            file.seekg(0);
             Alumno header;
             file >> header;
             file.seekg(pos * sizeof(Alumno));
