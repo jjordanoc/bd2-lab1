@@ -76,7 +76,6 @@ public:
         if (outFile.is_open()) {
             outFile << record;
             outFile.close();
-
         } else {
             cerr << "No se pudo abrir el archivo\n";
         }
@@ -89,6 +88,7 @@ public:
         if (infile.is_open()) {
             infile.seekg(pos * sizeof(tmp) + pos * salto);
             infile >> tmp;
+            infile.close();
         } else {
             cerr << "No se pudo abrir el archivo\n";
         }
