@@ -1,8 +1,10 @@
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <vector>
-
+#include <cstring>
 using namespace std;
+
 
 
 struct Alumno {
@@ -27,14 +29,12 @@ void readFromConsole(char buffer[], int size) {
 
 ostream &operator<<(ostream &stream, Alumno &p) {
     stream.write((char *) &p, sizeof(p));
-    stream << "\n";
     stream << flush;
     return stream;
 }
 
 istream &operator>>(istream &stream, Alumno &p) {
     stream.read((char *) &p, sizeof(p));
-    stream.get();
     return stream;
 }
 
@@ -42,7 +42,36 @@ class FixedRecord {
     string filename;
 
 public:
-    FixedRecord(const string &filename) : filename(filename) {}
+    FixedRecord(const string &filename) : filename(filename) {
+        ofstream createFile;
+        createFile.open(filename, ios::binary | ios::app);
+        createFile.close();
+        ifstream infile;
+        infile.open(filename, ios::binary);
+
+        if (infile.is_open()) {
+            infile.seekg(0);
+            Alumno header;
+            infile >> header;
+            if (strcmp(header.codigo, "xxxx") != 0) {
+                infile.close();
+                ofstream outfile;
+                outfile.open(filename, ios::binary | ios::app);
+                for (int i = 0; i < 4; ++i) {
+                    header.codigo[i] = 'x';
+                }
+                header.codigo[4] = '\0';
+                header.del = -1;
+                outfile << header;
+                outfile.close();
+            }
+            else {
+                infile.close();
+            }
+        } else {
+            cerr << "No se pudo abrir el archivo\n";
+        }
+    }
 
 
     vector<Alumno> load() {
@@ -69,6 +98,7 @@ public:
         fstream file;
         file.open(filename, ios::ate | ios::binary | ios::in | ios::out);
         if (file.is_open()) {
+            file.seekg(0);
             Alumno header;
             file >> header;
             if (header.del != -1) {
@@ -77,12 +107,11 @@ public:
                 Alumno lastDeletedRegister;
                 file >> lastDeletedRegister;
                 header.del = lastDeletedRegister.del;
-                file.seekg(0);
+                file.seekp(0);
                 file << header;
-                file.seekg(lastDeletedPos * sizeof(Alumno));
-            }
-            else {
-                file.seekg(ios::end);
+                file.seekp(lastDeletedPos * sizeof(Alumno));
+            } else {
+                file.seekp(0, ios::end);
             }
             file << record;
             file.close();
@@ -93,10 +122,10 @@ public:
     }
 
     Alumno readRecord(int pos) {
-        ifstream infile(filename);
+        ifstream infile(filename, ios::binary);
         Alumno tmp;
         if (infile.is_open()) {
-            infile.seekg(pos * sizeof(tmp));
+            infile.seekg(pos * sizeof(Alumno));
             infile >> tmp;
             infile.close();
         } else {
@@ -107,14 +136,14 @@ public:
 
     bool deleteRecord(int pos) {
         if (pos <= 0) return false;
-        fstream file(filename,ios::in | ios::out | ios::ate);
+        fstream file(filename, ios::in | ios::out | ios::ate | ios::binary);
         if (file.is_open()) {
             file.seekg(0);
             Alumno header;
             file >> header;
-            file.seekg(pos * sizeof(Alumno));
+            file.seekp(pos * sizeof(Alumno));
             file << header;
-            file.seekg(0);
+            file.seekp(0);
             Alumno newHeader;
             newHeader.del = pos;
             file << newHeader;
@@ -127,26 +156,23 @@ public:
 };
 
 int main() {
-    FixedRecord fixedRecord("../datos4.bin");
-    Alumno header;
-    header.del = -1;
-    fixedRecord.add(header);
-    for (int i = 0; i < 1; ++i) {
-        Alumno alumno;
-        cout << "Codigo: ";
-        readFromConsole(alumno.codigo, 5);
-        cout << "Nombre: ";
-        readFromConsole(alumno.nombre, 11);
-        cout << "Apellidos: ";
-        readFromConsole(alumno.apellidos, 20);
-        cout << "Carrera: ";
-        readFromConsole(alumno.carrera, 15);
-        cout << "Ciclo: ";
-        cin >> alumno.ciclo;
-        cout << "Mensualidad: ";
-        cin >> alumno.mensualidad;
-        fixedRecord.add(alumno);
-    }
+    FixedRecord fixedRecord("../datos5.bin");
+//    for (int i = 0; i < 2; ++i) {
+//        Alumno alumno;
+//        cout << "Codigo: ";
+//        readFromConsole(alumno.codigo, 5);
+//        cout << "Nombre: ";
+//        readFromConsole(alumno.nombre, 11);
+//        cout << "Apellidos: ";
+//        readFromConsole(alumno.apellidos, 20);
+//        cout << "Carrera: ";
+//        readFromConsole(alumno.carrera, 15);
+//        cout << "Ciclo: ";
+//        cin >> alumno.ciclo;
+//        cout << "Mensualidad: ";
+//        cin >> alumno.mensualidad;
+//        fixedRecord.add(alumno);
+//    }
     vector<Alumno> alumnos = fixedRecord.load();
     for (auto &tmp: alumnos) {
         cout << "Codigo:" << tmp.codigo << endl;
@@ -155,11 +181,15 @@ int main() {
         cout << "Carrera:" << tmp.carrera << endl;
         cout << "Ciclo:" << tmp.ciclo << endl;
         cout << "Mensualidad:" << tmp.mensualidad << endl;
+        cout << "Del:" << tmp.del << endl;
     }
-    //    Alumno segundo = fixedRecord.readRecord(1);
-    //    cout << "Codigo:" << segundo.codigo << endl;
-    //    cout << "Nombre:" << segundo.nombre << endl;
-    //    cout << "Apellidos:" << segundo.apellidos << endl;
-    //    cout << "Carrera:" << segundo.carrera << endl;
+    Alumno primero = fixedRecord.readRecord(1);
+    cout << "Codigo:" << primero.codigo << endl;
+    cout << "Nombre:" << primero.nombre << endl;
+    cout << "Apellidos:" << primero.apellidos << endl;
+    cout << "Carrera:" << primero.carrera << endl;
+    cout << "Ciclo:" << primero.ciclo << endl;
+    cout << "Mensualidad:" << primero.mensualidad << endl;
+    cout << "Del:" << primero.del << endl;
     return 0;
 }

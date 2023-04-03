@@ -86,7 +86,7 @@ public:
         Alumno tmp;
         int salto = 2;
         if (infile.is_open()) {
-            infile.seekg(pos * sizeof(tmp) + pos * salto);
+            infile.seekg(pos * sizeof(Alumno) + pos * salto);
             infile >> tmp;
             infile.close();
         } else {
@@ -106,6 +106,11 @@ int main() {
         cout << "Apellidos:" << tmp.apellidos << endl;
         cout << "Carrera:" << tmp.carrera << endl;
     }
+    Alumno segundo = fixedRecord.readRecord(1);
+    cout << "Codigo:" << segundo.codigo << endl;
+    cout << "Nombre:" << segundo.nombre << endl;
+    cout << "Apellidos:" << segundo.apellidos << endl;
+    cout << "Carrera:" << segundo.carrera << endl;
     Alumno alumno;
     cout << "Codigo: ";
     readFromConsole(alumno.codigo, 5);
@@ -116,10 +121,5 @@ int main() {
     cout << "Carrera: ";
     readFromConsole(alumno.carrera, 15);
     fixedRecord.add(alumno);
-    Alumno segundo = fixedRecord.readRecord(4);
-    cout << "Codigo:" << segundo.codigo << endl;
-    cout << "Nombre:" << segundo.nombre << endl;
-    cout << "Apellidos:" << segundo.apellidos << endl;
-    cout << "Carrera:" << segundo.carrera << endl;
     return 0;
 }
