@@ -1,4 +1,5 @@
 C:/Users/rojot/OneDrive/Escritorio/bd2/repo/lab1/cmake-build-debug/CMakeFiles/p1.dir
 C:/Users/rojot/OneDrive/Escritorio/bd2/repo/lab1/cmake-build-debug/CMakeFiles/p2.dir
+C:/Users/rojot/OneDrive/Escritorio/bd2/repo/lab1/cmake-build-debug/CMakeFiles/p3.dir
 C:/Users/rojot/OneDrive/Escritorio/bd2/repo/lab1/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/rojot/OneDrive/Escritorio/bd2/repo/lab1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
