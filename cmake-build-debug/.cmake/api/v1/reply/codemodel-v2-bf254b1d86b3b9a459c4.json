@@ -17,7 +17,8 @@
 					[
 						0,
 						1,
-						2
+						2,
+						3
 					]
 				}
 			],
@@ -34,7 +35,8 @@
 					[
 						0,
 						1,
-						2
+						2,
+						3
 					]
 				}
 			],
@@ -59,6 +61,13 @@
 					"id" : "p3::@6890427a1f51a3e7e1df",
 					"jsonFile" : "target-p3-Debug-69342f7186975a80a252.json",
 					"name" : "p3",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "p4::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-p4-Debug-8e480bba71d9ef248817.json",
+					"name" : "p4",
 					"projectIndex" : 0
 				}
 			]
