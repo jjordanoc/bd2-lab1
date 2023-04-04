@@ -7,3 +7,4 @@
 0007 Heider     Sanchez Quizpe      Mecatronica    
 0008 Juan       Castro              Cs             
 0009 Jose       Chachi              Cs             
+0010 virginia   puente              cs             

@@ -96,30 +96,53 @@ public:
     }
 };
 
+void menu(){
+    FixedRecord fixedRecord("../datos1.txt");
+    bool exit = false;
+    while(!exit) {
+        cout << "load(l)\n";
+        cout << "read(r)\n";
+        cout << "add(a)\n";
+        cout << "exit(e)\n";
+        char op;
+        cout << "elige operacion: ";
+        cin >> op;
+        if (op == 'l') {
+            vector<Alumno> alumnos = fixedRecord.load();
+            for (auto &tmp: alumnos) {
+                cout << "Codigo:" << tmp.codigo << endl;
+                cout << "Nombre:" << tmp.nombre << endl;
+                cout << "Apellidos:" << tmp.apellidos << endl;
+                cout << "Carrera:" << tmp.carrera << endl;
+            }
+        } else if (op == 'r') {
+            int pos;
+            cout << "pos: ";
+            cin >> pos;
+            Alumno alumno = fixedRecord.readRecord(pos);
+            cout << "Codigo:" << alumno.codigo << endl;
+            cout << "Nombre:" << alumno.nombre << endl;
+            cout << "Apellidos:" << alumno.apellidos << endl;
+            cout << "Carrera:" << alumno.carrera << endl;
+        } else if (op == 'a'){
+            Alumno alumno;
+            cout << "Codigo: ";
+            readFromConsole(alumno.codigo, 5);
+            cout << "Nombre: ";
+            readFromConsole(alumno.nombre, 11);
+            cout << "Apellidos: ";
+            readFromConsole(alumno.apellidos, 20);
+            cout << "Carrera: ";
+            readFromConsole(alumno.carrera, 15);
+            fixedRecord.add(alumno);
+        } else if (op == 'e'){
+            exit = true;
+        }
+    }
+}
+
 
 int main() {
-    FixedRecord fixedRecord("../datos1.txt");
-    vector<Alumno> alumnos = fixedRecord.load();
-    for (auto &tmp: alumnos) {
-        cout << "Codigo:" << tmp.codigo << endl;
-        cout << "Nombre:" << tmp.nombre << endl;
-        cout << "Apellidos:" << tmp.apellidos << endl;
-        cout << "Carrera:" << tmp.carrera << endl;
-    }
-    Alumno segundo = fixedRecord.readRecord(1);
-    cout << "Codigo:" << segundo.codigo << endl;
-    cout << "Nombre:" << segundo.nombre << endl;
-    cout << "Apellidos:" << segundo.apellidos << endl;
-    cout << "Carrera:" << segundo.carrera << endl;
-    Alumno alumno;
-    cout << "Codigo: ";
-    readFromConsole(alumno.codigo, 5);
-    cout << "Nombre: ";
-    readFromConsole(alumno.nombre, 11);
-    cout << "Apellidos: ";
-    readFromConsole(alumno.apellidos, 20);
-    cout << "Carrera: ";
-    readFromConsole(alumno.carrera, 15);
-    fixedRecord.add(alumno);
+    menu();
     return 0;
 }
