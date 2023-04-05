@@ -154,6 +154,19 @@ p3/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\p3.dir\build.make CMakeFiles/p3.dir/build
 .PHONY : p3/fast
 
+#=============================================================================
+# Target rules for targets named p4
+
+# Build rule for target.
+p4: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 p4
+.PHONY : p4
+
+# fast build rule for target.
+p4/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\p4.dir\build.make CMakeFiles/p4.dir/build
+.PHONY : p4/fast
+
 p1.obj: p1.cpp.obj
 .PHONY : p1.obj
 
@@ -226,6 +239,30 @@ p3.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\p3.dir\build.make CMakeFiles/p3.dir/p3.cpp.s
 .PHONY : p3.cpp.s
 
+p4.obj: p4.cpp.obj
+.PHONY : p4.obj
+
+# target to build an object file
+p4.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\p4.dir\build.make CMakeFiles/p4.dir/p4.cpp.obj
+.PHONY : p4.cpp.obj
+
+p4.i: p4.cpp.i
+.PHONY : p4.i
+
+# target to preprocess a source file
+p4.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\p4.dir\build.make CMakeFiles/p4.dir/p4.cpp.i
+.PHONY : p4.cpp.i
+
+p4.s: p4.cpp.s
+.PHONY : p4.s
+
+# target to generate assembly for a file
+p4.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\p4.dir\build.make CMakeFiles/p4.dir/p4.cpp.s
+.PHONY : p4.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -237,6 +274,7 @@ help:
 	@echo ... p1
 	@echo ... p2
 	@echo ... p3
+	@echo ... p4
 	@echo ... p1.obj
 	@echo ... p1.i
 	@echo ... p1.s
@@ -246,6 +284,9 @@ help:
 	@echo ... p3.obj
 	@echo ... p3.i
 	@echo ... p3.s
+	@echo ... p4.obj
+	@echo ... p4.i
+	@echo ... p4.s
 .PHONY : help
 
 

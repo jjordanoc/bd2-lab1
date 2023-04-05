@@ -97,7 +97,6 @@ public:
                 }
 
             }
-
         } else {
             cerr << "No se pudo abrir el archivo\n";
         }

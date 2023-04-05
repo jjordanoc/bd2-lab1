@@ -65,6 +65,7 @@ CMAKE_BINARY_DIR = C:\Users\Jose\Desktop\bd2\bd2-lab1\cmake-build-debug
 all: CMakeFiles/p1.dir/all
 all: CMakeFiles/p2.dir/all
 all: CMakeFiles/p3.dir/all
+all: CMakeFiles/p4.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -75,6 +76,7 @@ preinstall:
 clean: CMakeFiles/p1.dir/clean
 clean: CMakeFiles/p2.dir/clean
 clean: CMakeFiles/p3.dir/clean
+clean: CMakeFiles/p4.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -154,6 +156,32 @@ p3: CMakeFiles/p3.dir/rule
 CMakeFiles/p3.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\p3.dir\build.make CMakeFiles/p3.dir/clean
 .PHONY : CMakeFiles/p3.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/p4.dir
+
+# All Build rule for target.
+CMakeFiles/p4.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\p4.dir\build.make CMakeFiles/p4.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\p4.dir\build.make CMakeFiles/p4.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\Jose\Desktop\bd2\bd2-lab1\cmake-build-debug\CMakeFiles --progress-num=7,8 "Built target p4"
+.PHONY : CMakeFiles/p4.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/p4.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Jose\Desktop\bd2\bd2-lab1\cmake-build-debug\CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/p4.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Jose\Desktop\bd2\bd2-lab1\cmake-build-debug\CMakeFiles 0
+.PHONY : CMakeFiles/p4.dir/rule
+
+# Convenience name for target.
+p4: CMakeFiles/p4.dir/rule
+.PHONY : p4
+
+# clean rule for target.
+CMakeFiles/p4.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\p4.dir\build.make CMakeFiles/p4.dir/clean
+.PHONY : CMakeFiles/p4.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

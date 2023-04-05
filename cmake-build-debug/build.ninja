@@ -139,6 +139,39 @@ build p3.exe: CXX_EXECUTABLE_LINKER__p3_Debug CMakeFiles/p3.dir/p3.cpp.obj
   TARGET_IMPLIB = libp3.dll.a
   TARGET_PDB = p3.exe.dbg
 
+# =============================================================================
+# Object build statements for EXECUTABLE target p4
+
+
+#############################################
+# Order-only phony target for p4
+
+build cmake_object_order_depends_target_p4: phony || CMakeFiles/p4.dir
+
+build CMakeFiles/p4.dir/p4.cpp.obj: CXX_COMPILER__p4_Debug C$:/Users/rojot/OneDrive/Escritorio/bd2/repo/lab1/p4.cpp || cmake_object_order_depends_target_p4
+  DEP_FILE = CMakeFiles\p4.dir\p4.cpp.obj.d
+  FLAGS = -g -std=gnu++1z
+  OBJECT_DIR = CMakeFiles\p4.dir
+  OBJECT_FILE_DIR = CMakeFiles\p4.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target p4
+
+
+#############################################
+# Link the executable p4.exe
+
+build p4.exe: CXX_EXECUTABLE_LINKER__p4_Debug CMakeFiles/p4.dir/p4.cpp.obj
+  FLAGS = -g
+  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\p4.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = p4.exe
+  TARGET_IMPLIB = libp4.dll.a
+  TARGET_PDB = p4.exe.dbg
+
 
 #############################################
 # Utility command for edit_cache
@@ -171,6 +204,8 @@ build p2: phony p2.exe
 
 build p3: phony p3.exe
 
+build p4: phony p4.exe
+
 # =============================================================================
 # Folder targets.
 
@@ -179,7 +214,7 @@ build p3: phony p3.exe
 #############################################
 # Folder: C:/Users/rojot/OneDrive/Escritorio/bd2/repo/lab1/cmake-build-debug
 
-build all: phony p1.exe p2.exe p3.exe
+build all: phony p1.exe p2.exe p3.exe p4.exe
 
 # =============================================================================
 # Built-in targets
