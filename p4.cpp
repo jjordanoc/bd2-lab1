@@ -15,10 +15,6 @@ struct Matricula {
     Matricula() = default;
 
     Matricula(const string &codigo, int ciclo, float mensualidad, const string &observaciones) : codigo(codigo), ciclo(ciclo), mensualidad(mensualidad), observaciones(observaciones) {}
-
-    int recordSize() {
-        return codigo.length() + sizeof(int) + sizeof(float) + observaciones.length();
-    }
 };
 
 
@@ -64,6 +60,7 @@ istream &operator>>(istream &stream, Matricula &m) {
 class BinaryVariableRecord {
     string filename;
     string headerFilename;
+
 public:
     BinaryVariableRecord(const string &filename, const string &headerFilename) : filename(filename), headerFilename(headerFilename) {}
     vector<Matricula> load() {
@@ -89,7 +86,6 @@ public:
         if (outfile.is_open() && headerFile.is_open()) {
             int recordPos = outfile.tellp();
             outfile << record;
-//            int recordSize = record.recordSize();
             headerFile.write((char *) &recordPos, sizeof(int));
             outfile.close();
             headerFile.close();
