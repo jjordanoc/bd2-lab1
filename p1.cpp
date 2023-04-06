@@ -3,6 +3,7 @@
 #include <vector>
 
 using namespace std;
+bool read;
 
 struct Alumno {
     char codigo[5];
@@ -84,10 +85,15 @@ public:
     Alumno readRecord(int pos) {
         ifstream infile(filename);
         Alumno tmp;
+        read = true;
         int salto = 2;
         if (infile.is_open()) {
             infile.seekg(pos * sizeof(Alumno) + pos * salto);
             infile >> tmp;
+            if (infile.tellg() == -1) {
+                cerr << "No se puede acceder a esa posicion\n";
+                read = false;
+            }
             infile.close();
         } else {
             cerr << "No se pudo abrir el archivo\n";
@@ -120,10 +126,12 @@ void menu(){
             cout << "pos: ";
             cin >> pos;
             Alumno alumno = fixedRecord.readRecord(pos);
-            cout << "Codigo:" << alumno.codigo << endl;
-            cout << "Nombre:" << alumno.nombre << endl;
-            cout << "Apellidos:" << alumno.apellidos << endl;
-            cout << "Carrera:" << alumno.carrera << endl;
+            if (read) {
+                cout << "Codigo:" << alumno.codigo << endl;
+                cout << "Nombre:" << alumno.nombre << endl;
+                cout << "Apellidos:" << alumno.apellidos << endl;
+                cout << "Carrera:" << alumno.carrera << endl;
+            }
         } else if (op == 'a'){
             Alumno alumno;
             cout << "Codigo: ";

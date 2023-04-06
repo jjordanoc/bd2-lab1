@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstring>
 using namespace std;
+bool read;
 
 struct Position{
     char posicion[5];
@@ -34,6 +35,7 @@ public:
 
     Position readRecord(int pos){
         ifstream infile(filename);
+        read = true;
         Position readPosition;
         if(infile.is_open()){
             infile.seekg(pos * sizeof(Position) + 2 * pos);
@@ -41,6 +43,10 @@ public:
             readPosition.posicion[4] = '\0';
             infile.read(readPosition.tamano, 5);
             readPosition.tamano[4] = '\0';
+            if (infile.tellg() == -1) {
+                cerr << "No se puede acceder a esa posicion\n";
+                read = false;
+            }
             infile.close();
 
         }
@@ -165,13 +171,15 @@ public:
 
         if(file.is_open()){
             readPosition = header.readRecord(pos);
-            file.seekg(stof(readPosition.posicion) + pos);
-            getline(file, readStudent.nombre, '|');
-            getline(file, readStudent.apellidos, '|');
-            getline(file, readStudent.carrera, '|');
-            string mensualidadStr;
-            getline(file, mensualidadStr, '\n');
-            readStudent.mensualidad = stof(mensualidadStr);
+            if(read) {
+                file.seekg(stof(readPosition.posicion) + pos);
+                getline(file, readStudent.nombre, '|');
+                getline(file, readStudent.apellidos, '|');
+                getline(file, readStudent.carrera, '|');
+                string mensualidadStr;
+                getline(file, mensualidadStr, '\n');
+                readStudent.mensualidad = stof(mensualidadStr);
+            }
 
             file.close();
         }
@@ -213,10 +221,12 @@ int main() {
             cout << "Inserte posicion del alumno: ";
             cin >> pos;
             Alumno alumno = variableRecord.readRecord(pos);
-            cout << alumno.nombre << endl;
-            cout << alumno.apellidos << endl;
-            cout << alumno.carrera << endl;
-            cout << alumno.mensualidad << endl;
+            if (read) {
+                cout << alumno.nombre << endl;
+                cout << alumno.apellidos << endl;
+                cout << alumno.carrera << endl;
+                cout << alumno.mensualidad << endl;
+            }
         } else if (op == 'a'){
 
             Alumno alumno;

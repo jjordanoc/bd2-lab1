@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstring>
 using namespace std;
-
+bool read;
 
 
 struct Alumno {
@@ -124,9 +124,14 @@ public:
     Alumno readRecord(int pos) {
         ifstream infile(filename, ios::binary);
         Alumno tmp;
+        read = true;
         if (infile.is_open()) {
             infile.seekg(pos * sizeof(Alumno));
             infile >> tmp;
+            if (infile.tellg() == -1 or strcmp(tmp.codigo, "xxxx") == 0) {
+                cerr << "No se puede acceder a esa posicion\n";
+                read = false;
+            }
             infile.close();
         } else {
             cerr << "No se pudo abrir el archivo\n";
@@ -187,13 +192,15 @@ void menu(){
             cout << "pos: ";
             cin >> pos;
             Alumno alumno = fixedRecord.readRecord(pos);
-            cout << "Codigo:" << alumno.codigo << endl;
-            cout << "Nombre:" << alumno.nombre << endl;
-            cout << "Apellidos:" << alumno.apellidos << endl;
-            cout << "Carrera:" << alumno.carrera << endl;
-            cout << "Ciclo:" << alumno.ciclo << endl;
-            cout << "Mensualidad:" << alumno.mensualidad << endl;
-            cout << "Del:" << alumno.del << endl;
+            if (read) {
+                cout << "Codigo:" << alumno.codigo << endl;
+                cout << "Nombre:" << alumno.nombre << endl;
+                cout << "Apellidos:" << alumno.apellidos << endl;
+                cout << "Carrera:" << alumno.carrera << endl;
+                cout << "Ciclo:" << alumno.ciclo << endl;
+                cout << "Mensualidad:" << alumno.mensualidad << endl;
+                cout << "Del:" << alumno.del << endl;
+            }
 
         } else if (op == 'a'){
             Alumno alumno;

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 using namespace std;
+bool read;
 
 struct Matricula {
     string codigo;
@@ -97,13 +98,19 @@ public:
     Matricula readRecord(int pos) {
         ifstream infile(filename, ios::binary);
         ifstream headerFile(headerFilename, ios::binary);
+        read = true;
         Matricula result;
         if (infile.is_open() && headerFile.is_open()) {
             headerFile.seekg(pos * sizeof(int));
             int recordPos;
             headerFile.read((char *) &recordPos, sizeof(int));
-            infile.seekg(recordPos);
-            infile >> result;
+            if (headerFile.tellg() != -1) {
+                infile.seekg(recordPos);
+                infile >> result;
+            } else {
+                cerr << "No se puede acceder a esa posicion\n";
+                read = false;
+            }
             infile.close();
             headerFile.close();
         } else {
@@ -113,22 +120,52 @@ public:
     }
 };
 
-int main() {
+void menu(){
     BinaryVariableRecord binaryVariableRecord("../binary-variable.bin", "../binary-variable-header.bin");
-    binaryVariableRecord.add(Matricula("0001", 1, 5500.5, "Es alto"));
-    binaryVariableRecord.add(Matricula("0002", 3, 55000.610, "Es muy alto"));
-    binaryVariableRecord.add(Matricula("0003", 5, -3.14159265, "Es mas alto que el monte everest"));
-    auto res = binaryVariableRecord.load();
-    for (const auto &m: res) {
-        cout << "codigo: " << m.codigo << endl;
-        cout << "ciclo: " << m.ciclo << endl;
-        cout << "mensualidad: " << m.mensualidad << endl;
-        cout << "observaciones: " << m.observaciones << endl;
+    bool exit = false;
+    while(!exit) {
+        cout << "load(l)\n";
+        cout << "read(r)\n";
+        cout << "add(a)\n";
+        cout << "exit(e)\n";
+        char op;
+        cout << "elige operacion: ";
+        cin >> op;
+        if (op == 'l') {
+            vector<Matricula> matriculas = binaryVariableRecord.load();
+            for (const auto &m: matriculas) {
+                cout << "codigo: " << m.codigo << endl;
+                cout << "ciclo: " << m.ciclo << endl;
+                cout << "mensualidad: " << m.mensualidad << endl;
+                cout << "observaciones: " << m.observaciones << endl;
+            }
+        } else if (op == 'r') {
+            int pos;
+            cout << "pos: ";
+            cin >> pos;
+            auto m = binaryVariableRecord.readRecord(pos);
+            if (read) {
+                cout << "codigo: " << m.codigo << endl;
+                cout << "ciclo: " << m.ciclo << endl;
+                cout << "mensualidad: " << m.mensualidad << endl;
+                cout << "observaciones: " << m.observaciones << endl;
+            }
+
+        } else if (op == 'a'){
+            Matricula matricula;
+            cout << "codigo: "; cin >> matricula.codigo;
+            cout << "ciclo: "; cin >> matricula.ciclo;
+            cout << "mensualidad: "; cin >> matricula.mensualidad;
+            cout << "observaciones: "; cin.ignore();
+            getline(cin, matricula.observaciones);
+            binaryVariableRecord.add(matricula);
+        } else if (op == 'e'){
+            exit = true;
+        }
     }
-    // read 2nd record in O(1) time
-    auto m = binaryVariableRecord.readRecord(1);
-    cout << "codigo: " << m.codigo << endl;
-    cout << "ciclo: " << m.ciclo << endl;
-    cout << "mensualidad: " << m.mensualidad << endl;
-    cout << "observaciones: " << m.observaciones << endl;
+
+}
+
+int main() {
+    menu();
 }
