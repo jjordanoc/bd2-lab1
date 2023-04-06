@@ -1,8 +1,8 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
-#include  <sstream>
 #include <vector>
 using namespace std;
 
@@ -12,80 +12,50 @@ struct Matricula {
     float mensualidad;
     string observaciones;
 
-    Matricula() {}
+    Matricula() = default;
 
     Matricula(const string &codigo, int ciclo, float mensualidad, const string &observaciones) : codigo(codigo), ciclo(ciclo), mensualidad(mensualidad), observaciones(observaciones) {}
-
-    size_t recordSize() {
-        return sizeof(codigo.length() + 1) + sizeof(string) + sizeof(int) + sizeof(float) + sizeof(observaciones.length() + 1) + sizeof(string);
-    }
-
-    ostringstream zip() {
-        char *charBuf = new char[recordSize()];
-        ostringstream buffer(charBuf, ios::binary);
-        cout << "pos:" << buffer.tellp() << endl;
-        string::size_type codigoLength = codigo.length();
-        buffer.write((char *) &codigoLength, sizeof(codigoLength));
-        cout << "content: " << buffer.str() << endl;
-        buffer.write(codigo.c_str(), codigoLength + 1);
-        cout << "content: " << buffer.str() << endl;
-        buffer.write((char *) &ciclo, sizeof(int));
-        cout << "content: " << buffer.str() << endl;
-        buffer.write((char *) &mensualidad, sizeof(float));
-        cout << "content: " << buffer.str() << endl;
-        string::size_type observacionesLength = observaciones.length();
-        buffer.write((char *) &observacionesLength, sizeof(observacionesLength));
-        cout << "content: " << buffer.str() << endl;
-        buffer.write(observaciones.c_str(), observacionesLength + 1);
-        cout << "content: " << buffer.str() << endl;
-        cout << "pos:" << buffer.tellp() << endl;
-        cout << "real size:" << recordSize() << endl;
-//        int i;
-//        char *tmpPtr = buffer;
-//        string::size_type codigoLength = codigo.length();
-//        cout << "wrote: " << sprintf_s(tmpPtr, sizeof(codigoLength), "%s", (char *) &codigoLength) << endl;
-//        cout << "content: "<< tmpPtr << endl;
-//        tmpPtr += sizeof(codigoLength);
-//        cout << "wrote: " << sprintf_s(tmpPtr, codigoLength + 1, "%s", (char *) codigo.c_str())<< endl;
-//        cout << "content: "<< tmpPtr << endl;
-//        tmpPtr += codigoLength + 1;
-//        cout << "wrote: " << sprintf_s(tmpPtr, sizeof(int), "%s", (char *) &ciclo)<< endl;
-//        cout << "content: "<< tmpPtr << endl;
-//        tmpPtr += sizeof(int);
-//        cout << "wrote: " << sprintf_s(tmpPtr, sizeof(float) , "%s", (char *) &mensualidad)<< endl;
-//        cout << "content: "<< tmpPtr << endl;
-//        tmpPtr += sizeof(float);
-//        auto observacionesLength = observaciones.length();
-//        cout << "wrote: " << sprintf_s(tmpPtr, sizeof(observacionesLength), "%s", (char *) &observacionesLength)<< endl;
-//        cout << "content: "<< tmpPtr << endl;
-//        tmpPtr += sizeof(observacionesLength);
-//        cout << "wrote: " << sprintf_s(tmpPtr, observacionesLength + 1, "%s", (char *) observaciones.c_str())<< endl;
-//        cout << "content: "<< tmpPtr << endl;
-//        cout << "i:" << i << endl;
-//        printf_s( "Output:\n%s\ncharacter count = %d\n", buffer, i);
-        return buffer;
-    }
-
-    void unzip(char *packedRegister) {
-//        char *charBuf = new char[recordSize()];
-        istringstream buffer(packedRegister, ios::binary);
-        cout << packedRegister << endl;
-        buffer.seekg(0);
-        string::size_type codigoLength;
-        cout << buffer.tellg() << endl;
-        buffer.read((char *) &codigoLength, sizeof(codigoLength));
-//        buffer.seekg(sizeof(codigoLength) + 1);
-        cout << "codigo length: "<< codigoLength << endl;
-        cout << buffer.tellg() << endl;
-        char *codigoBuffer = new char[codigoLength+1];
-        buffer.read(codigoBuffer, codigoLength);
-        cout << buffer.tellg() << endl;
-        codigoBuffer[codigoLength] = 0;
-        cout <<"codigo buffer: "<< codigoBuffer << endl;
-        codigo = codigoBuffer;
-
-    }
 };
+
+
+ostream &operator<<(ostream &stream, Matricula &m) {
+    // codigo
+    int codigoLength = m.codigo.length();
+    stream.write((char *) &codigoLength, sizeof(int));
+    stream.write(m.codigo.c_str(), codigoLength);
+    // ciclo
+    stream.write((char *) &m.ciclo, sizeof(int));
+    // mensualidad
+    stream.write((char *) &m.mensualidad, sizeof(float));
+    // observaciones
+    int observacionesLength = m.observaciones.length();
+    stream.write((char *) &observacionesLength, sizeof(int));
+    stream.write(m.observaciones.c_str(), observacionesLength);
+    return stream;
+}
+
+istream &operator>>(istream &stream, Matricula &m) {
+    // codigo
+    int codigoLength;
+    stream.read((char *) &codigoLength, sizeof(int));
+    if (stream.eof()) return stream;
+    char codigoBuff[codigoLength + 1];
+    stream.read(codigoBuff, codigoLength);
+    codigoBuff[codigoLength] = '\0';
+    m.codigo = codigoBuff;
+    // ciclo
+    stream.read((char *) &m.ciclo, sizeof(int));
+    // mensualidad
+    stream.read((char *) &m.mensualidad, sizeof(float));
+    // observaciones
+    int observacionesLength;
+    stream.read((char *) &observacionesLength, sizeof(int));
+    char observacionesBuff[observacionesLength + 1];
+    stream.read(observacionesBuff, observacionesLength);
+    observacionesBuff[observacionesLength] = '\0';
+    m.observaciones = observacionesBuff;
+    return stream;
+}
 
 class BinaryVariableRecord {
     string filename;
@@ -95,17 +65,41 @@ public:
     vector<Matricula> load() {
         vector<Matricula> result;
         ifstream infile(filename, ios::binary);
+        if (infile.is_open()) {
+            while (!infile.eof()) {
+                Matricula tmp;
+                infile >> tmp;
+                if (!infile.eof()) {
+                    result.push_back(tmp);
+                }
+            }
+            infile.close();
+        } else {
+            cerr << "No se pudo abrir el archivo\n";
+        }
+        return result;
+    }
+    void add(Matricula record) {
+        ofstream outfile(filename, ios::binary | ios::app);
+        if (outfile.is_open()) {
+            outfile << record;
+            outfile.close();
+        } else {
+            cerr << "No se pudo abrir el archivo\n";
+        }
     }
 };
 
 int main() {
-    Matricula matricula("0001", 1, 5500.2, "Es alto");
-    auto zip = matricula.zip();
-    cout << zip.str() << endl;
-    cout << endl << matricula.recordSize() << endl;
-    Matricula matricula2;
-    auto tmp = zip.str();
-    char *c = (char *) tmp.c_str();
-    matricula2.unzip(c);
-    cout << "codigo:" << matricula2.codigo << endl;
+    BinaryVariableRecord binaryVariableRecord("../binary-variable.bin");
+    binaryVariableRecord.add(Matricula("0001", 1, 5500.5, "Es alto"));
+    binaryVariableRecord.add(Matricula("0002", 3, 55000.610, "Es muy alto"));
+    binaryVariableRecord.add(Matricula("0003", 5, -3.14159265, "Es mas alto que el monte everest"));
+    auto res = binaryVariableRecord.load();
+    for (const auto &m: res) {
+        cout << "codigo: " << m.codigo << endl;
+        cout << "ciclo: " << m.ciclo << endl;
+        cout << "mensualidad: " << m.mensualidad << endl;
+        cout << "observaciones: " << m.observaciones << endl;
+    }
 }
