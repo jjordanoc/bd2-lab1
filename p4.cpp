@@ -15,6 +15,10 @@ struct Matricula {
     Matricula() = default;
 
     Matricula(const string &codigo, int ciclo, float mensualidad, const string &observaciones) : codigo(codigo), ciclo(ciclo), mensualidad(mensualidad), observaciones(observaciones) {}
+
+    int recordSize() {
+        return codigo.length() + sizeof(int) + sizeof(float) + observaciones.length();
+    }
 };
 
 
@@ -59,9 +63,9 @@ istream &operator>>(istream &stream, Matricula &m) {
 
 class BinaryVariableRecord {
     string filename;
-
+    string headerFilename;
 public:
-    BinaryVariableRecord(const string &filename) : filename(filename) {}
+    BinaryVariableRecord(const string &filename, const string &headerFilename) : filename(filename), headerFilename(headerFilename) {}
     vector<Matricula> load() {
         vector<Matricula> result;
         ifstream infile(filename, ios::binary);
@@ -80,18 +84,41 @@ public:
         return result;
     }
     void add(Matricula record) {
-        ofstream outfile(filename, ios::binary | ios::app);
-        if (outfile.is_open()) {
+        ofstream outfile(filename, ios::binary | ios::app | ios::ate);
+        ofstream headerFile(headerFilename, ios::binary | ios::app);
+        if (outfile.is_open() && headerFile.is_open()) {
+            int recordPos = outfile.tellp();
             outfile << record;
+//            int recordSize = record.recordSize();
+            headerFile.write((char *) &recordPos, sizeof(int));
             outfile.close();
+            headerFile.close();
         } else {
             cerr << "No se pudo abrir el archivo\n";
         }
     }
+
+    Matricula readRecord(int pos) {
+        ifstream infile(filename, ios::binary);
+        ifstream headerFile(headerFilename, ios::binary);
+        Matricula result;
+        if (infile.is_open() && headerFile.is_open()) {
+            headerFile.seekg(pos * sizeof(int));
+            int recordPos;
+            headerFile.read((char *) &recordPos, sizeof(int));
+            infile.seekg(recordPos);
+            infile >> result;
+            infile.close();
+            headerFile.close();
+        } else {
+            cerr << "No se pudo abrir el archivo\n";
+        }
+        return result;
+    }
 };
 
 int main() {
-    BinaryVariableRecord binaryVariableRecord("../binary-variable.bin");
+    BinaryVariableRecord binaryVariableRecord("../binary-variable.bin", "../binary-variable-header.bin");
     binaryVariableRecord.add(Matricula("0001", 1, 5500.5, "Es alto"));
     binaryVariableRecord.add(Matricula("0002", 3, 55000.610, "Es muy alto"));
     binaryVariableRecord.add(Matricula("0003", 5, -3.14159265, "Es mas alto que el monte everest"));
@@ -102,4 +129,10 @@ int main() {
         cout << "mensualidad: " << m.mensualidad << endl;
         cout << "observaciones: " << m.observaciones << endl;
     }
+    // read 2nd record in O(1) time
+    auto m = binaryVariableRecord.readRecord(1);
+    cout << "codigo: " << m.codigo << endl;
+    cout << "ciclo: " << m.ciclo << endl;
+    cout << "mensualidad: " << m.mensualidad << endl;
+    cout << "observaciones: " << m.observaciones << endl;
 }
