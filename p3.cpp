@@ -118,7 +118,7 @@ public:
             file << record.nombre << "|";
             file << record.apellidos << "|";
             file << record.carrera << "|";
-            file << float(record.mensualidad+0.00) << "\n";
+            file << float(record.mensualidad+0.01) << "\n";
             file.close();
 
             int recordLength = record.recordSize();
@@ -199,7 +199,6 @@ int main() {
     bool flag = true;
 
     while(flag){
-
         cout << "=====================\n";
         cout << "load(l)\n";
         cout << "read(r)\n";
@@ -230,11 +229,10 @@ int main() {
         } else if (op == 'a'){
 
             Alumno alumno;
-            cout << "Nombre: "; cin >> alumno.nombre;
-            cout << "Apellidos: "; cin >> alumno.apellidos;
-            cout << "Carrera: "; cin >> alumno.carrera;
+            cout << "Nombre: ";  std::getline(std::cin,alumno.nombre); std::getline(std::cin,alumno.nombre);
+            cout << "Apellidos: "; std::getline(std::cin,alumno.apellidos);
+            cout << "Carrera: "; std::getline(std::cin,alumno.carrera);
             cout << "Mensualidad: "; cin >> alumno.mensualidad;
-            alumno.mensualidad = float(alumno.mensualidad/1.0 + 0.01);
 
             variableRecord.add(alumno);
 
