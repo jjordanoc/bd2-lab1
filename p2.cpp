@@ -83,7 +83,7 @@ public:
             while (!infile.eof()) {
                 Alumno tmp;
                 infile >> tmp;
-                if (!infile.eof()) {
+                if (!infile.eof() and strcmp(tmp.codigo, "xxxx") != 0) {
                     alumnos.push_back(tmp);
                 }
             }
@@ -140,22 +140,32 @@ public:
     }
 
     bool deleteRecord(int pos) {
-        if (pos <= 0) return false;
+        if (pos <= 0) {
+            cerr << "No es posible eliminar esa posicion\n";
+            return false;
+        }
         fstream file(filename, ios::in | ios::out | ios::ate | ios::binary);
         if (file.is_open()) {
             file.seekg(0);
             Alumno header;
             file >> header;
             file.seekp(pos * sizeof(Alumno));
-            file << header;
-            file.seekp(0);
-            Alumno newHeader;
-            for (int i = 0; i < 4; ++i) {
-                newHeader.codigo[i] = 'x';
+            Alumno tmp;
+            file >> tmp;
+            file.seekp(pos * sizeof(Alumno));
+            if (file.tellp() == -1 or strcmp(tmp.codigo, "xxxx") == 0) {
+                cerr << "No es posible eliminar esa posicion\n";
+            } else {
+                file << header;
+                file.seekp(0);
+                Alumno newHeader;
+                for (int i = 0; i < 4; ++i) {
+                    newHeader.codigo[i] = 'x';
+                }
+                newHeader.codigo[4] = '\0';
+                newHeader.del = pos;
+                file << newHeader;
             }
-            newHeader.codigo[4] = '\0';
-            newHeader.del = pos;
-            file << newHeader;
             file.close();
         } else {
             cerr << "No se pudo abrir el archivo\n";
