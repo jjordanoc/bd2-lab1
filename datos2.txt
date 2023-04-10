@@ -5,3 +5,5 @@ Lidya|Cooper Quizpe|Mecatronica|1850.00
 Thony|Cooper Quizpe|Mecatronica|1850.00
 Jose|Chachi Rodriguez|Computer Science|1240.20
 Jose|Chachi Rodriguez|Computer Science|1240.01
+Jose|Chachi Rodriguez|Computer Science|1240
+Virginia|Puente|Computer Science|1500.2

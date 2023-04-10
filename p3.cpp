@@ -3,8 +3,17 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <sstream>
+
 using namespace std;
 bool read;
+
+template < typename Type > std::string to_str (const Type & t)
+{
+    std::ostringstream os;
+    os << t;
+    return os.str ();
+}
 
 struct Position{
     char posicion[5];
@@ -67,7 +76,25 @@ struct Alumno
     float mensualidad;
 
     size_t recordSize(){
-        return size(nombre) + size(apellidos) + size(carrera) + sizeof(mensualidad) + 7;
+        int sizeRecord = size(nombre) + size(apellidos) + size(carrera) + sizeof(mensualidad) + 4;
+
+        string number = to_str(mensualidad);
+
+        int contador = 0;
+        bool flag = false;
+        for(const auto letra: number){
+
+            if(flag == false and letra == '.'){
+                flag = true;
+            }
+
+            if(flag){
+                ++contador;
+            }
+
+        }
+
+        return sizeRecord + contador;
     }
 };
 
@@ -118,7 +145,7 @@ public:
             file << record.nombre << "|";
             file << record.apellidos << "|";
             file << record.carrera << "|";
-            file << float(record.mensualidad+0.01) << "\n";
+            file << record.mensualidad << "\n";
             file.close();
 
             int recordLength = record.recordSize();
